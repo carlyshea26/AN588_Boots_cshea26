@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Part 1
-Using the “KamilarAndCooperData.csv” dataset, run a linear regression looking at log(HomeRange_km2) in relation to log(Body_mass_female_mean) and report your𝛽coefficients (slope and intercept).
+Using the “KamilarAndCooperData.csv” dataset, run a linear regression looking at log(HomeRange_km2) in relation to log(Body_mass_female_mean) and report your 𝛽 coefficients (slope and intercept).
 ```{r}
 #start by loading my packages and data
 library(curl) #curl is used to transfer my data
@@ -35,13 +35,13 @@ head(data) #overall data looks good
 ```
 ```{r}
 # running linear regression:
-reg1 <-lm(data=d, log(data$HomeRange_km2)~log(data$Body_mass_female_mean))
+reg1 <-lm(data=data, log(data$HomeRange_km2)~log(data$Body_mass_female_mean))
 summary(reg1)
 ```
 - We learn from this summary that the model produces an beta intercept of -9.44123 and the slope is 1.03643.
 
 ## Part 2
-Then, use bootstrapping to sample from your data 1000 times with replacement, each time fitting the same model and calculating the same coefficients. This generates a sampling distribution for each𝛽coefficient.
+Then, use bootstrapping to sample from your data 1000 times with replacement, each time fitting the same model and calculating the same coefficients. This generates a sampling distribution for each 𝛽 coefficient.
 
 ```{r}
 library(boot) # bootstrapping package
@@ -63,7 +63,7 @@ plot(boots1, index = 1)  #intercept
 plot(boots1, index = 2)  #slope
 ```
 
-- Estimate the standard error for each of your𝛽coefficients as the standard deviation of the sampling distribution from your bootstrap and determine the 95% CI for each of your𝛽coefficients based on the appropriate quantiles from your sampling distribution.
+- Estimate the standard error for each of your 𝛽 coefficients as the standard deviation of the sampling distribution from your bootstrap and determine the 95% CI for each of your 𝛽 coefficients based on the appropriate quantiles from your sampling distribution.
 ```{r}
 # (according to R In Action) bca is preferrable here because it provides an interval that makes simple adjustments for bias
 boot.ci(boots1, type = "bca", index = 1)  # 95% CI for intercept
