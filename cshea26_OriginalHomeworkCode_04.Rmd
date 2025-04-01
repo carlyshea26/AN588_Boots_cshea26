@@ -25,6 +25,26 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Part 1
 Using the “KamilarAndCooperData.csv” dataset, run a linear regression looking at log(HomeRange_km2) in relation to log(Body_mass_female_mean) and report your𝛽coefficients (slope and intercept).
+```{r}
+#start by loading my packages and data
+library(curl) #curl is used to transfer my data
+
+f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall21/KamilarAndCooperData.csv")
+data <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+head(data) #overall data looks good 
+```
+```{r}
+# running linear regression:
+reg1 <-lm(data=d, log(data$HomeRange_km2)~log(data$Body_mass_female_mean))
+summary(reg1)
+```
+
+
+
+
+
+
+
 
 
 ## Part 2
