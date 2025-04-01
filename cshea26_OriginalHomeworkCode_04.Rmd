@@ -2,10 +2,39 @@
 title: "Boots For Days!"
 author: "Carly S McDermott"
 date: "2025-04-01"
-output: html_document
+output:
+  rmarkdown::html_document:
+    theme: readable
+    toc: yes
+    toc_depth: 2
+    toc_float: 
+      collapsed: yes
+      smooth_scroll: yes
 ---
+<style>
+  body {
+    background-color: #f3f3f3;
+    color: #333333; /* I changed the text color to white for contrast */
+  }
+</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+## Part 1
+Using the “KamilarAndCooperData.csv” dataset, run a linear regression looking at log(HomeRange_km2) in relation to log(Body_mass_female_mean) and report your𝛽coefficients (slope and intercept).
+
+
+## Part 2
+Then, use bootstrapping to sample from your data 1000 times with replacement, each time fitting the same model and calculating the same coefficients. This generates a sampling distribution for each𝛽coefficient.
+
+- Estimate the standard error for each of your𝛽coefficients as the standard deviation of the sampling distribution from your bootstrap and determine the 95% CI for each of your𝛽coefficients based on the appropriate quantiles from your sampling distribution.
+- How does the former compare to the SE estimated from your entire dataset using the formula for standard error implemented in lm()?
+- How does the latter compare to the 95% CI estimated from your entire dataset?
+
+
+
+5 Challenges That I Faced: 
+- 
