@@ -38,23 +38,46 @@ head(data) #overall data looks good
 reg1 <-lm(data=d, log(data$HomeRange_km2)~log(data$Body_mass_female_mean))
 summary(reg1)
 ```
-
-
-
-
-
-
-
-
+- We learn from this summary that the model produces an beta intercept of -9.44123 and the slope is 1.03643.
 
 ## Part 2
 Then, use bootstrapping to sample from your data 1000 times with replacement, each time fitting the same model and calculating the same coefficients. This generates a sampling distribution for each𝛽coefficient.
 
+```{r}
+library(boot) # bootstrapping package
+
+# creating a function to return slope and beta value coefficients
+boots <- function(formula, data, indices) {
+  datar <- data[indices, ]
+  fit <- lm(formula, data = datar)  
+  return(coef(fit))  
+}
+set.seed(1234)
+
+#this represents 1000 replications
+boots1 <- boot(data = data, statistic = boots, R = 1000, formula = log(HomeRange_km2) ~ log(Body_mass_female_mean))
+print(boots1)
+
+# shows the distribution of the coefficients (intercept & slope)
+plot(boots1, index = 1)  #intercept
+plot(boots1, index = 2)  #slope
+```
+
 - Estimate the standard error for each of your𝛽coefficients as the standard deviation of the sampling distribution from your bootstrap and determine the 95% CI for each of your𝛽coefficients based on the appropriate quantiles from your sampling distribution.
+```{r}
+# (according to R In Action) bca is preferrable here because it provides an interval that makes simple adjustments for bias
+boot.ci(boots1, type = "bca", index = 1)  # 95% CI for intercept
+boot.ci(boots1, type = "bca", index = 2)  # 95% CI for slope
+```
+^ i really like this function/command and makes visualizing these confidence intervals very clear and straightforward!
+
 - How does the former compare to the SE estimated from your entire dataset using the formula for standard error implemented in lm()?
+
 - How does the latter compare to the 95% CI estimated from your entire dataset?
 
 
 
 5 Challenges That I Faced: 
-- 
+- what even is bootstrapping? still dont feel the most comfortable with it but will likely take practice
+- pretty much relied on the textbook R in Action for a defined summary/walk through of how to perform this function
+- felt good about the actual creation of the model
