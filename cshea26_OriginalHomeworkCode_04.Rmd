@@ -1,0 +1,11 @@
+---
+title: "Boots For Days!"
+author: "Carly S McDermott"
+date: "2025-04-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
