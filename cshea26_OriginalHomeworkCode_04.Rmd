@@ -120,9 +120,8 @@ BOOTS:
 
 **Comparison**: The 95% CIs from both methods are pretty close, supporting that the data likely meet the assumptions of linear regression. we see slope interval of 95% CIs for the bootstrapping is slightly narrower. 
 
-## 5 Challenges That I Faced: 
+## Challenges That I Faced: 
 - Bootstrapping in general. I still don't feel the most comfortable with it but like anything regarding coding that I've learned this semester, it will likely take more practice!
 - I pretty much relied on the textbook R in Action for a defined summary/walk through of how to perform this function, which I found to be helpful when before I was very confused.
-- Overall, I felt good about the actual creation of the model! 
-- Understanding SE of mean and why the calculations are different.
-- **one more question**
+- Overall, I felt good about the actual creation of the model! Interpreting data can sometimes be a struggle for me because I find statistics to be tricky but this seemed pretty straightforward! 
+- Again, trying to interpret the SE of the mean and why the calculations are different for the estimate vs the actual 1000 samples was an adjustment, just because on the different components of the data that I was working with.
