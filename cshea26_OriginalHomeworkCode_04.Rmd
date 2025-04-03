@@ -11,14 +11,15 @@ output:
       collapsed: yes
       smooth_scroll: yes
 ---
-<p align="center">
+<!-- adding image of boots hehe -->           
+<p align="center"> 
   <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnoyd3JweWd4bDJqZGk3dzB5Mml6ZHZqZ3U3dWIwNTl5Y3RobjRrMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26FmQPtkD2oatMC9G/giphy.gif" alt="GIF">
 </p>
 
 <style>
   body {
     background-color: #f3f3f3;
-    color: #333333; /* I changed the text color to white for contrast */
+    color: #333333; /* i changed the text color to dark gray for contrast */
   }
 </style>
 
