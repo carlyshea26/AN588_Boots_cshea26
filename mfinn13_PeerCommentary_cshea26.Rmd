@@ -1,0 +1,141 @@
+---
+title: "mfinn13_PeerCommentary_cshea26"
+output: html_document
+date: "2025-04-25"
+---
+
+
+<!-- adding image of boots hehe -->           
+<p align="center"> 
+  <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnoyd3JweWd4bDJqZGk3dzB5Mml6ZHZqZ3U3dWIwNTl5Y3RobjRrMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26FmQPtkD2oatMC9G/giphy.gif" alt="GIF">
+</p>
+
+<style>
+  body {
+    background-color: #f3f3f3;
+    color: #333333; /* i changed the text color to dark gray for contrast */
+  }
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Matteo: Very nice boots gif!
+
+
+## Part 1
+Using the “KamilarAndCooperData.csv” dataset, run a linear regression looking at log(HomeRange_km2) in relation to log(Body_mass_female_mean) and report your 𝛽 coefficients (slope and intercept).
+```{r}
+#start by loading my packages and data
+library(curl) #curl is used to transfer my data
+
+f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall21/KamilarAndCooperData.csv")
+data <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+head(data) #overall data looks good 
+```
+```{r}
+# running linear regression:
+reg1 <-lm(data=data, log(data$HomeRange_km2)~log(data$Body_mass_female_mean))
+summary(reg1)
+```
+- We learn from the summary of reg1 above that the model produces an beta intercept of -9.44123 and the slope is 1.03643.
+
+#Matteo: Nice. My lm got the same coefficients. 
+
+## Part 2
+Then, use bootstrapping to sample from your data 1000 times with replacement, each time fitting the same model and calculating the same coefficients. This generates a sampling distribution for each 𝛽 coefficient.
+
+```{r}
+library(boot) # bootstrapping package
+
+# creating a function to return slope and beta value coefficients
+boots <- function(formula, data, indices) {
+  datar <- data[indices, ]
+  fit <- lm(formula, data = datar)  
+  return(coef(fit))  
+}
+set.seed(1234)
+
+#this represents 1000 replications
+boots1 <- boot(data = data, statistic = boots, R = 1000, formula = log(HomeRange_km2) ~ log(Body_mass_female_mean))
+print(boots1)
+
+# shows the distribution of the coefficients (intercept & slope)
+plot(boots1, index = 1)  #intercept
+plot(boots1, index = 2)  #slope
+
+#Matteo: wow this is so much simpler and more efficient than the way I did. I was not aware that there was a boot function within {boot} that does the bootstrapping for you. very cool. I did some for loops and kept having issues with it :(
+
+#Matteo: very nice plots. I like that it includes q-q plots showing normality. 
+```
+
+- Estimate the standard error for each of your 𝛽 coefficients as the standard deviation of the sampling distribution from your bootstrap and determine the 95% CI for each of your 𝛽 coefficients based on the appropriate quantiles from your sampling distribution.
+```{r}
+# (according to R In Action) bca is preferable here because it provides an interval that makes simple adjustments for bias
+boot.ci(boots1, type = "bca", index = 1)  # 95% CI for intercept
+boot.ci(boots1, type = "bca", index = 2)  # 95% CI for slope
+
+```
+^ i really like this function/command and makes visualizing these confidence intervals very clear and straightforward!
+
+#Matteo: this is a super cool function and makes it so easy! 
+#Matteo: My CIs are centered around the same estimates but mine are much tighter, which I think is because I did it manually and while doing that I calculated standard error incorrectly, so yours are probably good. 
+
+- How does the former compare to the SE estimated from your entire dataset using the formula for standard error implemented in lm()?
+
+**Differences In Analysis of SE:** 
+
+- In the original: standard error is estimated from the original model (reg1) which is just is based on the assumptions of linear regression (including normality + homoscedasticity)
+- In bootstrapped model: standard error is standard deviation of the bootstrapped coefficient estimates across the 1000 datasets we sampled 1000
+```{r}
+summary(reg1)$coefficients[,2]  # se from lm() model (part 1) (,2 because this only pulls out se-which is column 2)
+
+# standard errors from bootstrapping (part 2)
+sd(boots1$t[,1])  # se of intercept
+sd(boots1$t[,2])  # se of slope
+```
+We can see here that the se for the beta intercept and slope would be similar (original model is slightly higher)
+
+REG1 (estimate):
+
+- 𝛽 coefficient: 0.67293459 
+- slope: 0.08487709 
+
+BOOTS:
+
+- 𝛽 coefficient: 0.5728366
+- slope: 0.07308898
+
+**Comparison**: Basically these values are very similar. This makes sense as if the original dataset follows the assumptions of linear regression, the standard error from both methods should be relatively similar. Say our data was not normal (i.e. not normal residual) the bootstrap standard error might deviate from the estimate of the first model.
+
+#Matteo: very in-depth answer. nice! i just compared the values lol. 
+
+- How does the latter compare to the 95% CI estimated from your entire dataset?
+```{r}
+#creating confidence interval for entire model
+confint(reg1) #level is already set to .95 
+
+#Matteo: cool
+```
+REG1 (estimate):
+
+- 95% CI Interval for 𝛽: **(-10.7720889, -8.110374)**
+- 95% CI Interval for slope: **(0.8685707  1.204292)**
+
+BOOTS:
+
+- 95% CI Interval for 𝛽: **(-10.680,  -8.365)**
+- 95% CI Interval for slope: **(0.904,  1.195)** 
+
+**Comparison**: The 95% CIs from both methods are pretty close, supporting that the data likely meet the assumptions of linear regression. we see slope interval of 95% CIs for the bootstrapping is slightly narrower. 
+
+#Matteo: very nice. mine were not very similar to the CIs from the lm but again I think that is because I calculated standard error incorrectly. 
+
+#Matteo: overall very nice job. your code is super efficient and easy to follow and from what i can tell all of the outputted values are correct. 
+
+## Challenges That I Faced: 
+- Bootstrapping in general. I still don't feel the most comfortable with it but like anything regarding coding that I've learned this semester, it will likely take more practice!
+- I pretty much relied on the textbook R in Action for a defined summary/walk through of how to perform this function, which I found to be helpful when before I was very confused.
+- Overall, I felt good about the actual creation of the model! Interpreting data can sometimes be a struggle for me because I find statistics to be tricky but this seemed pretty straightforward! 
+- Again, trying to interpret the SE of the mean and why the calculations are different for the estimate vs the actual 1000 samples was an adjustment, just because on the different components of the data that I was working with.
